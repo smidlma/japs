@@ -1,6 +1,7 @@
 {
   "name": "jasp-fe",
   "private": true,
+  "homepage": "https://smidlma.github.io/jasp",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
