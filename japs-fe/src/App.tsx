@@ -1,11 +1,10 @@
-import './App.css'
-import { Button } from './components/ui/button'
+// 1. import `NextUIProvider` component
+import { Navigation } from './components/Navigation'
 
 function App() {
   return (
     <>
-      <div>Hello world</div>
-      <Button variant='default'>Click</Button>
+      <Navigation />
     </>
   )
 }
