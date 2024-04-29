@@ -22,7 +22,7 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
-          cd jasp-fe
+          cd japs-fe
           npm install
           npm run build
 
@@ -30,6 +30,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: jasp-fe/dist # The folder the action should deploy.
+          folder: japs-fe/dist # The folder the action should deploy.
           clean: true # Automatically remove old files from the deployment branch
           commit-message: Deploy to GitHub Pages 🚀
