@@ -26,8 +26,9 @@ export function Navigation() {
         </NavbarBrand>
 
         <Input
+          className='hidden sm:block sm:w-72'
           classNames={{
-            base: 'max-w-full sm:max-w-[10rem] h-10',
+            base: 'max-w-full sm:max-w-[12rem] h-10',
             mainWrapper: 'h-full',
             input: 'text-small',
             inputWrapper:
