@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using jAPS.API.Db;
 
@@ -11,9 +12,10 @@ using jAPS.API.Db;
 namespace jAPS.API.Migrations
 {
     [DbContext(typeof(JapsDbContext))]
-    partial class JapsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240430052932_extend-product")]
+    partial class extendproduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,6 +117,7 @@ namespace jAPS.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
                     b.Property<string>("Alt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -137,6 +140,7 @@ namespace jAPS.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Src")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StockQuantity")
@@ -150,10 +154,7 @@ namespace jAPS.API.Migrations
             modelBuilder.Entity("jAPS.API.Models.Transaction", b =>
                 {
                     b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"), 1L, 1);
 
                     b.Property<Guid>("BasketId")
                         .HasColumnType("uniqueidentifier");
@@ -226,7 +227,8 @@ namespace jAPS.API.Migrations
                 {
                     b.Navigation("OrderItems");
 
-                    b.Navigation("Transaction");
+                    b.Navigation("Transaction")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
