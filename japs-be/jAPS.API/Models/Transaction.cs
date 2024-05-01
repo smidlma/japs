@@ -2,15 +2,18 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Transactions;
 using jAPS.API.Models.Enums;
+using jAPS.API.Db;
+using Microsoft.EntityFrameworkCore;
 
 namespace jAPS.API.Models
 {
     public class Transaction
     {
-        
-        public int TransactionId { get; set; }        
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int TransactionId { get; set; }
+        [Key]
         public Guid BasketId { get; set; }
-
         [Required]
         public PaymentMethod PaymentMethod { get; set; }
         [Required]
@@ -19,13 +22,14 @@ namespace jAPS.API.Models
         public DateTime CreatedAt { get; set; }
         [Required]
         public TransactionState TransactionState { get; set; }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public int OrderId { get; set; }
-        [ForeignKey(nameof(OrderId))]
+        [ForeignKey(nameof(OrderId))]        
         public Order Order { get; set; }
 
         [ForeignKey(nameof(CustomerId))]
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
 
     }
 }
+
