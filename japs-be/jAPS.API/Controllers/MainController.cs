@@ -84,10 +84,10 @@ namespace jAPS.API.Controllers
             trans.Order.TotalPrice += totalPrice;
 
 
-            if (request.BasketId is null) 
-                context.Transactions.Add(trans);            
-            else 
-                context.Transactions.Update(trans);            
+            if (request.BasketId is null)
+                context.Transactions.Add(trans);
+            else
+                context.Transactions.Update(trans);
 
             await context.SaveChangesAsync();
 
@@ -134,20 +134,11 @@ namespace jAPS.API.Controllers
         [HttpGet("GetBasket/{basketId}")]
         public async Task<ActionResult<Basket>> GetBasket([FromRoute] Guid basketId)
         {
-            var items = await context.OrdersItems
-                                     .Include(x => x.Product)
-                                     .Where(x => x.Order.Transaction.BasketId == basketId)
-                                     .ToListAsync();
-
-            var totalPrice = items.Sum(x => x.Product.Price * x.Quantity);
-            
-
-            return Ok(new Basket
-            {
-                BasketId = basketId,
-                Items = mapper.Map<List<ProductDto>>(items),
-                TotalPrice = totalPrice
+            var basket = await Mediator.Send(new GetBasketQuery {
+                basketId = basketId
             });
+
+            return Ok(basket);
         }
 
         [HttpPost("CreateProduct")]
