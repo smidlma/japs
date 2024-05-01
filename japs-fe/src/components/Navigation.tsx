@@ -15,8 +15,12 @@ import {
 } from '@nextui-org/react'
 import { CgShoppingCart } from 'react-icons/cg'
 import { FaSearch } from 'react-icons/fa'
+import { useMatch } from 'react-router-dom'
 
 export function Navigation() {
+  const isCartActive = useMatch('/japs/cart')
+  const isProductsActive = useMatch('/japs/products')
+
   return (
     <Navbar isBordered>
       <NavbarContent justify='start'>
@@ -40,9 +44,12 @@ export function Navigation() {
           type='search'
         />
         <NavbarContent className='hidden sm:flex'>
-          <NavbarItem isActive>
-            <Link href='#' aria-current='page' color='secondary'>
-              Products
+          <NavbarItem isActive={Boolean(isProductsActive)}>
+            <Link
+              href='products'
+              color={isProductsActive ? 'secondary' : 'foreground'}
+            >
+              Product
             </Link>
           </NavbarItem>
         </NavbarContent>
@@ -77,8 +84,16 @@ export function Navigation() {
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
+
         <Badge content={2} shape='circle' color='danger'>
-          <Button radius='full' isIconOnly variant='light'>
+          <Button
+            as={Link}
+            href='cart'
+            radius='full'
+            isIconOnly
+            variant='light'
+            color={isCartActive ? 'secondary' : 'default'}
+          >
             <CgShoppingCart size={28} />
           </Button>
         </Badge>
