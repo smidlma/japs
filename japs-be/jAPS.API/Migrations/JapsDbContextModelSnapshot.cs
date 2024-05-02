@@ -52,7 +52,7 @@ namespace jAPS.API.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("jAPS.API.Models.Order", b =>
@@ -74,7 +74,7 @@ namespace jAPS.API.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("jAPS.API.Models.OrderItem", b =>
@@ -103,7 +103,7 @@ namespace jAPS.API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrdersItems");
+                    b.ToTable("OrdersItems", (string)null);
                 });
 
             modelBuilder.Entity("jAPS.API.Models.Product", b =>
@@ -115,6 +115,7 @@ namespace jAPS.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
                     b.Property<string>("Alt")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -137,6 +138,7 @@ namespace jAPS.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Src")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StockQuantity")
@@ -144,16 +146,13 @@ namespace jAPS.API.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("jAPS.API.Models.Transaction", b =>
                 {
                     b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"), 1L, 1);
 
                     b.Property<Guid>("BasketId")
                         .HasColumnType("uniqueidentifier");
@@ -183,7 +182,7 @@ namespace jAPS.API.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("jAPS.API.Models.OrderItem", b =>
@@ -226,7 +225,8 @@ namespace jAPS.API.Migrations
                 {
                     b.Navigation("OrderItems");
 
-                    b.Navigation("Transaction");
+                    b.Navigation("Transaction")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

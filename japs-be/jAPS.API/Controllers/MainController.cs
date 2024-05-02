@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using jAPS.API.Commands;
 using jAPS.API.Db;
 using jAPS.API.Models;
 using jAPS.API.Queries;
@@ -97,38 +98,12 @@ namespace jAPS.API.Controllers
         [HttpPost("RemoveFromBasket/{basketId}")]
         public async Task<ActionResult<Basket>> RemoveFromBasket([FromRoute] Guid basketId, [FromBody] ProductDto request)
         {
-            List<OrderItem> items = context.OrdersItems
-                                           .Include(x => x.Product)
-                                           .Include(x => x.Order)
-                                           .Where(x => x.Order.Transaction.BasketId == basketId)
-                                           .ToList();
-
-            var itemToRemove = items.First(x => x.Product.ProductId == request.ProductId);
-            int itemCount = itemToRemove.Quantity - request.Quantity;
-
-            if (itemCount <= 0)
-            {
-                context.OrdersItems.RemoveRange(itemToRemove);
-                items.Remove(itemToRemove);
-            }
-            else
-            {
-                context.OrdersItems.Update(itemToRemove);
-                items.First().Quantity = itemCount;
-            }
-
-            await context.SaveChangesAsync();
-
-            var totalPrice = items.Sum(x => x.Product.Price * x.Quantity);
-
-            context.Orders.Update(items[0].Order);
-
-            return Ok(new Basket
-            {
+            var basket = await Mediator.Send(new RemoveFromBasketCommand { 
                 BasketId = basketId,
-                Items = mapper.Map<List<ProductDto>>(items),
-                TotalPrice = totalPrice
+                Product = request
             });
+
+            return Ok(basket);
         }
 
         [HttpGet("GetBasket/{basketId}")]
@@ -142,11 +117,13 @@ namespace jAPS.API.Controllers
         }
 
         [HttpPost("CreateProduct")]
-        public async Task<ActionResult<Basket>> CreateProduct([FromBody] Product product)
+        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
         {
-            await context.Products.AddAsync(product);
-            await context.SaveChangesAsync();
-            return Ok();
+            var prod = await Mediator.Send(new CreateProductCommand {
+                Product = product
+            });
+
+            return Ok(prod);
         }
 
         [HttpGet("GetAllProducts")]
@@ -159,7 +136,11 @@ namespace jAPS.API.Controllers
         [HttpGet("GetProductDetail/{productId}")]
         public async Task<ActionResult<Product>> GetProductDetail([FromRoute] int productId)
         {
-            return Ok(await context.Products.Where(p => p.ProductId == productId).FirstAsync());
+            var product = await Mediator.Send(new GetProductQuery { 
+                ProductId = productId
+            });
+
+            return Ok(product);
         }
 
         //TODO: finish order function

@@ -23,7 +23,7 @@ namespace jAPS.API.Queries
 
         public async Task<Basket> Handle(GetBasketQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.GetBasketItems(request.basketId);
+            var items = await _repository.GetBasketItemsAsync(request.basketId);
 
             var totalPrice = items.Sum(x => x.Product.Price * x.Quantity);
 

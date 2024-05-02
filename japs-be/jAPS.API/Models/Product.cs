@@ -18,7 +18,7 @@ namespace jAPS.API.Models
         public string Description { get; set; }
         [Required]
         public string ShortDescription { get; set; }
-        public string Src { get; set; }
-        public string Alt { get; set; }
+        public string? Src { get; set; }
+        public string? Alt { get; set; }
     }
 }
