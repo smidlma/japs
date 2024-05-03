@@ -10,7 +10,7 @@ namespace jAPS.API.Queries
 
     public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, ICollection<Product>>
     {
-        MainRepository _repository;
+        private MainRepository _repository;
         public GetAllProductsQueryHandler(MainRepository repository)
         {
             _repository = repository;

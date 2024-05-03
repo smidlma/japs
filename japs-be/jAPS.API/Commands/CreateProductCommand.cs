@@ -13,7 +13,7 @@ public class CreateProductCommand : IRequest<Product>
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Product>
 {
-    MainRepository _repository;
+    private MainRepository _repository;
     public CreateProductCommandHandler(MainRepository repository)
     {
         _repository = repository;

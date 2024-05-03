@@ -12,7 +12,7 @@ public class GetProductQuery : IRequest<Product>
 
 public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Product>
 {
-    MainRepository _repository;
+    private MainRepository _repository;
     public GetProductQueryHandler(MainRepository repository)
     {
         _repository = repository;

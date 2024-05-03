@@ -1,7 +1,9 @@
 ﻿using Humanizer;
 using jAPS.API.Models;
+using MediatR;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace jAPS.API.Db;
 
@@ -13,9 +15,13 @@ public class MainRepository
         _context = context;
     }
 
-    public async Task RemoveOrderItemAsync(OrderItem item) { 
+    public Task<List<Product>> GetBasketProducts(List<ProductDto> products) =>
+         _context.Products.Where(p => products.Select(x => x.ProductId).Contains(p.ProductId)).ToListAsync();
+
+    public async Task RemoveOrderItemAsync(OrderItem item)
+    {
         _context.OrdersItems.Remove(item);
-        await _context.SaveChangesAsync();        
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateOrderItemAsync(OrderItem item)
@@ -36,6 +42,23 @@ public class MainRepository
     public Task<List<Product>> GetAllProductsAsync() =>
         _context.Products.ToListAsync();
 
+    public Task<Transaction> GetTransaction(Guid basketId) =>
+        _context.Transactions
+                .Include(o => o.Order.OrderItems)
+                .FirstAsync(x => x.BasketId == basketId);
+
+    public async Task AddTransaction(Transaction transaction)
+    {
+        _context.Transactions.Add(transaction);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateTransaction(Transaction transaction)
+    {
+        _context.Transactions.Update(transaction);
+        await _context.SaveChangesAsync();
+    }
+
     public Task<List<OrderItem>> GetBasketItemsAsync(Guid basketId) =>
         _context.OrdersItems
                 .Include(x => x.Product)
@@ -48,6 +71,13 @@ public class MainRepository
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
         return product;
+    }
+
+    public async Task AppendCustomerToTransaction(Transaction transaction, Customer customer)
+    {
+        transaction.Customer = customer;
+        _context.Transactions.Update(transaction);
+        await _context.SaveChangesAsync();
     }
 
 }

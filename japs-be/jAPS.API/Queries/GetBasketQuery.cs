@@ -13,8 +13,8 @@ namespace jAPS.API.Queries
 
     public class GetBasketQueryHandler : IRequestHandler<GetBasketQuery, Basket>
     {
-        MainRepository _repository;
-        IMapper _mapper;
+        private MainRepository _repository;
+        private IMapper _mapper;
         public GetBasketQueryHandler(MainRepository repository, IMapper mapper)
         {
             _repository = repository;

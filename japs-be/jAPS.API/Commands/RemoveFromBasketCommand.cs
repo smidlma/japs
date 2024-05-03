@@ -25,7 +25,6 @@ public class RemoveFromBasketCommandHandler : IRequestHandler<RemoveFromBasketCo
     {
         List<OrderItem> items = await _repository.GetBasketItemsAsync(request.BasketId);
 
-
         var itemToRemove = items.First(x => x.Product.ProductId == request.Product.ProductId);
         int itemCount = itemToRemove.Quantity - request.Product.Quantity;
 
