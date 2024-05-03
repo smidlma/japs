@@ -44,7 +44,9 @@ public class MainRepository
 
     public Task<Transaction> GetTransaction(Guid basketId) =>
         _context.Transactions
-                .Include(o => o.Order.OrderItems)
+                .Include(o => o.Order)
+                    .ThenInclude(oi => oi.OrderItems)
+                        .ThenInclude(p => p.Product)
                 .FirstAsync(x => x.BasketId == basketId);
 
     public async Task AddTransaction(Transaction transaction)

@@ -25,11 +25,9 @@ namespace jAPS.API.Commands
         {
             var trans = await _repository.GetTransaction(request.BasketId);
             await _repository.AppendCustomerToTransaction(trans, request.Customer);
-            trans.Customer = request.Customer;
-            
-            var ord = _mapper.Map<OrderDetail>(trans);
+            trans.Customer = request.Customer; 
 
-            return ord;
+            return _mapper.Map<OrderDetail>(trans); 
         }
     }
 }
