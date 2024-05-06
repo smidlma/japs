@@ -16,10 +16,24 @@ import {
 import { CgShoppingCart } from 'react-icons/cg'
 import { FaSearch } from 'react-icons/fa'
 import { useMatch } from 'react-router-dom'
+import axios from "axios";
+import {useQuery} from "@tanstack/react-query";
+import {BasketDto} from "../dtos/BasketDto.ts";
+
+const fetchUserCart = async () => {
+    const basketId = localStorage.getItem('basketId');
+    if (basketId) {
+      const { data } = await axios.get<BasketDto>(`${import.meta.env.VITE_API_URL}/GetBasket/${basketId}`);
+      return data;
+    }
+    return null;
+};
 
 export function Navigation() {
-  const isCartActive = useMatch('/japs/cart')
-  const isProductsActive = useMatch('/japs/products')
+  const isCartActive = useMatch('/japs/cart');
+  const isProductsActive = useMatch('/japs/products');
+  const basketRequest = useQuery({queryKey: ['basket'], queryFn: fetchUserCart});
+  console.log(basketRequest.data);
 
   return (
     <Navbar className={'bg-black'} isBordered>
@@ -85,7 +99,7 @@ export function Navigation() {
           </DropdownMenu>
         </Dropdown>
 
-        <Badge content={2} shape='circle' color='danger'>
+        <Badge content={basketRequest.data?.items?.length ?? 0} shape='circle' color='danger'>
           <Button
             as={Link}
             href='cart'

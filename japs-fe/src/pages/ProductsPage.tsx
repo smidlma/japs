@@ -1,17 +1,16 @@
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
-import {ProductArrayItemDto} from "../dtos/ProductArrayItemDto.ts";
 import {Button} from "@nextui-org/react";
 import {FaShoppingCart} from "react-icons/fa";
+import {ProductDto} from "../dtos/ProductDto.ts";
 
 const fetchProducts = async () => {
-  const { data } = await axios.get<ProductArrayItemDto[]>(`${import.meta.env.VITE_API_URL}/GetAllProducts`);
+  const { data } = await axios.get<ProductDto[]>(`${import.meta.env.VITE_API_URL}/GetAllProducts`);
   return data;
 };
 
 export const ProductsPage = () => {
   const { data } = useQuery({queryKey: ['products'], queryFn: fetchProducts});
-  console.log(data);
 
   return (
       <div className="bg-white w-10/12 mx-auto mt-5">

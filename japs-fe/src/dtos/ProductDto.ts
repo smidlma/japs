@@ -1,4 +1,4 @@
-export interface ProductArrayItemDto {
+export interface ProductDto {
     productId: number,
     productNumber: string,
     productName: string,
