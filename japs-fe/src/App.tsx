@@ -11,7 +11,7 @@ function App() {
     <>
       <NextUIProvider navigate={navigate}>
           <QueryClientProvider client={queryClient}>
-            <main className='dark text-foreground bg-background'>
+            <main className='bg-white dark text-foreground'>
               <Navigation />
               <Outlet />
             </main>

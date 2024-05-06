@@ -22,7 +22,7 @@ export function Navigation() {
   const isProductsActive = useMatch('/japs/products')
 
   return (
-    <Navbar isBordered>
+    <Navbar className={'bg-black'} isBordered>
       <NavbarContent justify='start'>
         <NavbarBrand className='mr-4'>
           Japan Automotive Parts
