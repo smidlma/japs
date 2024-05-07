@@ -53,7 +53,7 @@ export default function CartItem({ item }: ICartItemProps) {
     const handleDecrement = () => {
         const basketId = localStorage.getItem("basketId");
         if (basketId) {
-            removeFromBasketRequest.mutate( { productId: item.productId, quantity: quantity - 1 } );
+            removeFromBasketRequest.mutate( { productId: item.productId, quantity: 1 } );
         }
         setQuantity((prev) => prev > 0 ? prev - 1 : 0);
     }
