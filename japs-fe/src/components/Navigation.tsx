@@ -23,20 +23,19 @@ import {useState} from "react";
 import Cart from "./Cart.tsx";
 
 
-const fetchUserCart = async () => {
+export function Navigation() {
+  const fetchUserCart = async () => {
     const basketId = localStorage.getItem('basketId');
     if (basketId) {
       const { data } = await axios.get<BasketDto>(`${import.meta.env.VITE_API_URL}/GetBasket/${basketId}`);
       return data;
     }
     return null;
-};
+  };
 
-export function Navigation() {
   const isCartActive = useMatch('/japs/cart');
   const isProductsActive = useMatch('/japs/products');
   const basketRequest = useQuery({queryKey: ['basket'], queryFn: fetchUserCart});
-  console.log(basketRequest.data);
   const [isCartOpen, setCartOpen] = useState(false)
 
   return (
