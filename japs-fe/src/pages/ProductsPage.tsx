@@ -1,8 +1,10 @@
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import {Button} from "@nextui-org/react";
 import {FaShoppingCart} from "react-icons/fa";
 import {ProductDto} from "../dtos/ProductDto.ts";
+import {AddToBasketDto} from "../dtos/AddToBasketDto.ts";
+
 
 const fetchProducts = async () => {
   const { data } = await axios.get<ProductDto[]>(`${import.meta.env.VITE_API_URL}/GetAllProducts`);
@@ -10,7 +12,23 @@ const fetchProducts = async () => {
 };
 
 export const ProductsPage = () => {
-  const { data } = useQuery({queryKey: ['products'], queryFn: fetchProducts});
+    const queryClient = useQueryClient();
+    const { data } = useQuery({queryKey: ['products'], queryFn: fetchProducts});
+
+    const addToBasket = async (data: AddToBasketDto) => {
+        return await axios.post<AddToBasketDto>(`${import.meta.env.VITE_API_URL}/AddToBasket`, data).then( (response) => {
+            if (response.data.basketId) {
+                localStorage.setItem('basketId', response.data.basketId);
+            }
+            queryClient.invalidateQueries({ queryKey: ['basket'] });
+        });
+    };
+  const addToBasketRequest = useMutation({mutationFn: addToBasket});
+
+  const handleAddToBasket = (productId: number) => {
+      const basketId = localStorage.getItem('basketId');
+      addToBasketRequest.mutate({ basketId: basketId ? basketId : undefined, items: [{ productId: productId, quantity: 1 }] });
+  }
 
   return (
       <div className="bg-white w-10/12 mx-auto mt-5">
@@ -40,7 +58,7 @@ export const ProductsPage = () => {
                     </div>
                     <p className="text-sm font-medium text-gray-900">{`${product.price},- Kč`}</p>
                   </div>
-                    <Button className={'mt-3 w-full'} endContent={<FaShoppingCart/>}>
+                    <Button onClick={() => handleAddToBasket(product.productId)} className={'mt-3 w-full'} endContent={<FaShoppingCart/>}>
                         Add to cart
                     </Button>
                 </div>
