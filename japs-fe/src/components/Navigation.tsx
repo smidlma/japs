@@ -19,6 +19,9 @@ import { useMatch } from 'react-router-dom'
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {BasketDto} from "../dtos/BasketDto.ts";
+import {useState} from "react";
+import Cart from "./Cart.tsx";
+
 
 const fetchUserCart = async () => {
     const basketId = localStorage.getItem('basketId');
@@ -34,6 +37,7 @@ export function Navigation() {
   const isProductsActive = useMatch('/japs/products');
   const basketRequest = useQuery({queryKey: ['basket'], queryFn: fetchUserCart});
   console.log(basketRequest.data);
+  const [isCartOpen, setCartOpen] = useState(false)
 
   return (
     <Navbar className={'bg-black'} isBordered>
@@ -101,8 +105,7 @@ export function Navigation() {
 
         <Badge content={basketRequest.data?.items?.length ?? 0} shape='circle' color='danger'>
           <Button
-            as={Link}
-            href='cart'
+            onClick={() => setCartOpen(true)}
             radius='full'
             isIconOnly
             variant='light'
@@ -112,6 +115,7 @@ export function Navigation() {
           </Button>
         </Badge>
       </NavbarContent>
+      <Cart isOpen={isCartOpen} setOpen={setCartOpen} basket={basketRequest.data ?? undefined} />
     </Navbar>
   )
 }

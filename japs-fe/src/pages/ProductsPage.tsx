@@ -56,7 +56,7 @@ export const ProductsPage = () => {
                         </a>
                       </h3>
                     </div>
-                    <p className="text-sm font-medium text-gray-900">{`${product.price},- Kč`}</p>
+                    <p className="text-sm font-medium text-gray-900">{`${product.price} €`}</p>
                   </div>
                     <Button onClick={() => handleAddToBasket(product.productId)} className={'mt-3 w-full'} endContent={<FaShoppingCart/>}>
                         Add to cart
