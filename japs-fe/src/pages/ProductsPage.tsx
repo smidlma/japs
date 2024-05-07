@@ -77,6 +77,7 @@ export const ProductsPage = () => {
               </div>
               <Button
                 onClick={() => handleAddToBasket(product.productId)}
+                isDisabled={product.stockQuantity === 0}
                 className={"mt-3 w-full"}
                 endContent={<FaShoppingCart />}
               >
