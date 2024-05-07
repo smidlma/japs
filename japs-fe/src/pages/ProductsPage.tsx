@@ -14,12 +14,12 @@ const fetchProducts = async () => {
 
 const addToBasket = async (data: AddToBasketDto) => {
   return await axios
-      .post<AddToBasketDto>(`${import.meta.env.VITE_API_URL}/AddToBasket`, data)
-      .then((response) => {
-        if (response.data.basketId) {
-          localStorage.setItem("basketId", response.data.basketId);
-        }
-      });
+    .post<AddToBasketDto>(`${import.meta.env.VITE_API_URL}/AddToBasket`, data)
+    .then((response) => {
+      if (response.data.basketId) {
+        localStorage.setItem("basketId", response.data.basketId);
+      }
+    });
 };
 
 export const ProductsPage = () => {
@@ -67,6 +67,13 @@ export const ProductsPage = () => {
                   </h3>
                 </div>
                 <p className="text-sm font-medium text-gray-900">{`${product.price} €`}</p>
+              </div>
+              <div className={"mt-2"}>
+                {product.stockQuantity > 0 ? (
+                  <p className="text-xs text-green-950">{`On stock (${product.stockQuantity})`}</p>
+                ) : (
+                  <p className="text-xs text-red-950">{`Out of stock`}</p>
+                )}
               </div>
               <Button
                 onClick={() => handleAddToBasket(product.productId)}
