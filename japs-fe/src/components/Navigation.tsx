@@ -16,30 +16,34 @@ import {
 import { CgShoppingCart } from 'react-icons/cg'
 import { FaSearch } from 'react-icons/fa'
 import { useMatch } from 'react-router-dom'
-import axios from "axios";
-import {useQuery} from "@tanstack/react-query";
-import {BasketDto} from "../dtos/BasketDto.ts";
-import {useState} from "react";
-import Cart from "./Cart.tsx";
-
+import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
+import { BasketDto } from '../dtos/BasketDto.ts'
+import { useState } from 'react'
+import Cart from './Cart.tsx'
 
 export function Navigation() {
   const fetchUserCart = async () => {
-    const basketId = localStorage.getItem('basketId');
+    const basketId = localStorage.getItem('basketId')
     if (basketId) {
-      const { data } = await axios.get<BasketDto>(`${import.meta.env.VITE_API_URL}/GetBasket/${basketId}`);
-      return data;
+      const { data } = await axios.get<BasketDto>(
+        `${import.meta.env.VITE_API_URL}/GetBasket/${basketId}`
+      )
+      return data
     }
-    return null;
-  };
+    return null
+  }
 
-  const isCartActive = useMatch('/japs/cart');
-  const isProductsActive = useMatch('/japs/products');
-  const basketRequest = useQuery({queryKey: ['basket'], queryFn: fetchUserCart});
+  const isCartActive = useMatch('/japs/cart')
+  const isProductsActive = useMatch('/japs/products')
+  const basketRequest = useQuery({
+    queryKey: ['basket'],
+    queryFn: fetchUserCart,
+  })
   const [isCartOpen, setCartOpen] = useState(false)
 
   return (
-    <Navbar className={'bg-black'} isBordered>
+    <Navbar className='dark text-foreground bg-background' isBordered>
       <NavbarContent justify='start'>
         <NavbarBrand className='mr-4'>
           Japan Automotive Parts
@@ -88,13 +92,9 @@ export function Navigation() {
           <DropdownMenu aria-label='Profile Actions' variant='flat'>
             <DropdownItem key='profile' className='h-14 gap-2'>
               <p className='font-semibold'>Signed in as</p>
-              <p className='font-semibold'>zoey@example.com</p>
+              <p className='font-semibold'>Pepa Zdepa</p>
             </DropdownItem>
             <DropdownItem key='settings'>My Settings</DropdownItem>
-            <DropdownItem key='team_settings'>Team Settings</DropdownItem>
-            <DropdownItem key='analytics'>Analytics</DropdownItem>
-            <DropdownItem key='system'>System</DropdownItem>
-            <DropdownItem key='configurations'>Configurations</DropdownItem>
             <DropdownItem key='help_and_feedback'>Help & Feedback</DropdownItem>
             <DropdownItem key='logout' color='danger'>
               Log Out
@@ -102,7 +102,11 @@ export function Navigation() {
           </DropdownMenu>
         </Dropdown>
 
-        <Badge content={basketRequest.data?.items?.length ?? 0} shape='circle' color='danger'>
+        <Badge
+          content={basketRequest.data?.items?.length ?? 0}
+          shape='circle'
+          color='danger'
+        >
           <Button
             onClick={() => setCartOpen(true)}
             radius='full'
@@ -114,7 +118,11 @@ export function Navigation() {
           </Button>
         </Badge>
       </NavbarContent>
-      <Cart isOpen={isCartOpen} setOpen={setCartOpen} basket={basketRequest.data ?? undefined} />
+      <Cart
+        isOpen={isCartOpen}
+        setOpen={setCartOpen}
+        basket={basketRequest.data ?? undefined}
+      />
     </Navbar>
   )
 }
