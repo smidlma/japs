@@ -66,6 +66,7 @@ export const CheckoutPage = () => {
   const finishOrderMutation = useMutation({
     mutationFn: finishOrder,
     onSuccess: () => {
+      localStorage.removeItem('basketId')
       navigate('/japs/products')
     },
     onError: (err) => console.error(err),
